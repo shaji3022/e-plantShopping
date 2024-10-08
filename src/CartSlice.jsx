@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+import './ProductList.jsx'
 export const CartSlice = createSlice({
   name: 'cart',
   initialState: {
@@ -8,6 +8,7 @@ export const CartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       const { name, image, cost } = action.payload;
+      console.log('Adding item to cart:', name);  // Add this line for debugging
       const existingItem = state.items.find(item => item.name === name);
       if (existingItem) {
         existingItem.quantity++;
@@ -29,6 +30,7 @@ export const CartSlice = createSlice({
   },
 });
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
 
 export default CartSlice.reducer;
