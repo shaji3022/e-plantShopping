@@ -8,7 +8,7 @@ function ProductList() {
     const [showCart, setShowCart] = useState(false); 
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
     const [addedToCart, setAddedToCart] = useState({});
-
+    
     // Accessing the cart items from Redux state
     const cartItems = useSelector(state => state.cart.items);  
     console.log(cartItems);  // This will log the array of cart items
@@ -27,7 +27,13 @@ function ProductList() {
           [product.name]: true,  // Set the product as added
         }));
     };
-
+    const handleRemoveFromCart = (product) => {
+        setAddedToCart((prevState) => {
+            const updatedState = { ...prevState };
+            delete updatedState[product.name];  // Remove the product from the addedToCart state
+            return updatedState;
+        });
+    };
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -159,7 +165,12 @@ function ProductList() {
                                         <img className="product-image" src={plant.image} alt={plant.name} />
                                         <div className="product-title">{plant.name}</div>
                                         {/* Similarly like the above plant.name show other details like description and cost */}
-                                        <button className="product-button" onClick={() => handleAddToCart(plant)}>Add to Cart</button>
+                                        <button className="product-button" onClick={() => handleAddToCart(plant)}
+                                           disabled={!!addedToCart[plant.name]}  
+                                            >
+                                                 {addedToCart[plant.name] ? "Added to Cart" : "Add to Cart"}
+                                                
+                                                </button>
                                     </div>
                                 ))}
                             </div>
@@ -167,7 +178,7 @@ function ProductList() {
                     ))}
                 </div>
             ) : (
-                <CartItem onContinueShopping={handleContinueShopping} />
+                <CartItem onContinueShopping={handleContinueShopping} onRemoveFromCart={handleRemoveFromCart} />
             )}
         </div>
     );
